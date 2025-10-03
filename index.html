@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Formulir Kunjungan</title>
+    
+    <!-- Import Google font - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: linear-gradient(to bottom, #254588, #38528a, #4d597e, #ffffff);
+      }
+
+      /* Default (desktop/tablet) */
+      .container {
+        position: relative;
+        max-width: 700px;
+        width: 100%;
+        background: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        text-align: center;
+      }
+
+      /* Untuk layar kecil (HP) */
+      @media (max-width: 600px) {
+        body {
+          padding: 0; /* hilangkan padding body */
+        }
+        .container {
+          max-width: 100%;
+          width: 100%;
+          min-height: 100vh; /* isi minimal penuh layar */
+          padding: 20px 15px 50px; /* tambah padding bawah biar tombol tidak terlalu nempel */
+          border-radius: 0;
+          box-shadow: none;
+          overflow-y: auto; /* biar bisa scroll kalau isi panjang */
+        }
+      }
+
+      .container img {
+        width: 100px;
+        margin-bottom: 10px;
+      }
+      .container .sub-header {
+        font-size: 1.2rem;
+        color: #1e3a8a;
+        font-weight: 500;
+        margin-bottom: 5px;
+      }
+      .container header {
+        font-size: 2.2rem; /* diperbesar */
+        color: #1e3a8a;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      .container .form {
+        margin-top: 15px;
+        text-align: left;
+      }
+      .form .input-box {
+        width: 100%;
+        margin-top: 18px;
+      }
+      .input-box label {
+        color: #333;
+        font-weight: 500;
+      }
+      .form :where(.input-box input, .input-box textarea) {
+        position: relative;
+        width: 100%;
+        outline: none;
+        font-size: 1rem;
+        color: #333;
+        margin-top: 8px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 12px 15px;
+        resize: none;
+        background: #fafafa;
+      }
+      .input-box input:focus, .input-box textarea:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 5px rgba(37, 99, 235, 0.4);
+      }
+      .form button {
+        height: 50px;
+        width: 100%;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-top: 25px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 6px;
+        background: linear-gradient(135deg, #2563eb, #1e40af);
+      }
+      .form button:hover {
+        transform: scale(1.02);
+      }
+
+      /* Popup Overlay */
+      .overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+      }
+
+      /* Popup Box */
+      .popup {
+        background: #fff;
+        padding: 30px 30px; /* tambah padding biar tinggi */
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        min-height: 160px; /* tambahkan tinggi minimum */
+        transform: scale(0.7);
+        opacity: 0;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* biar konten tetap rata tengah */
+      }
+
+      .popup.show {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      .popup h3 {
+        margin-bottom: 10px;
+        color: #12486b;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="container">
+      <!-- Logo -->
+      <img src="Logo_KOMDIGI.png" alt="Logo KOMDIGI" />
+      
+      <!-- Sub Judul -->
+      <div class="sub-header">BPSDMP Komdigi Manado</div>
+      
+      <!-- Judul Utama -->
+      <header>Formulir Kunjungan</header>
+      
+      <form id="visitForm" class="form">
+        <div class="input-box">
+          <label>Nama</label>
+          <input type="text" placeholder="Masukkan nama lengkap" required />
+        </div>
+        <div class="input-box">
+          <label>Instansi</label>
+          <input type="text" placeholder="Masukkan asal instansi" required />
+        </div>
+        <div class="input-box">
+          <label>Tujuan Kunjungan</label>
+          <textarea rows="3" placeholder="Tuliskan tujuan kunjungan Anda" required></textarea>
+        </div>
+        <div class="input-box">
+          <label>Alamat</label>
+          <textarea rows="3" placeholder="Masukkan alamat lengkap" required></textarea>
+        </div>
+        <div class="input-box">
+          <label>Nomor Kontak</label>
+          <input type="tel" placeholder="Contoh: 081234567890" required />
+        </div>
+        <button type="submit">Kirim</button>
+      </form>
+    </section>
+
+    <!-- Popup Konfirmasi -->
+    <div class="overlay" id="popupOverlay">
+      <div class="popup" id="popupBox">
+        <h3>Terima kasih!</h3>
+        <p>Data kunjungan Anda telah berhasil dikirim.</p>
+      </div>
+    </div>
+
+    <script>
+      const form = document.getElementById("visitForm");
+      const overlay = document.getElementById("popupOverlay");
+      const popup = document.getElementById("popupBox");
+
+      form.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        // tampilkan popup
+        overlay.style.display = "flex";
+        setTimeout(() => popup.classList.add("show"), 50);
+
+        // auto close setelah 5 detik
+        setTimeout(() => {
+          popup.classList.remove("show");
+          setTimeout(() => {
+            overlay.style.display = "none";
+            form.reset(); // reset form setelah submit
+          }, 300);
+        }, 5000);
+      });
+    </script>
+  </body>
+</html>
