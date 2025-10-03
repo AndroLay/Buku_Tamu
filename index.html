@@ -222,8 +222,10 @@
       const response = await fetch("https://script.google.com/macros/s/AKfycbwNQgv78hggmzuu3QJowUhoip2Av4av_NJY479i_Yxv1DFesoO2DexZXbJBo0xm2eRL/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
+        mode: "no-cors"
       });
+
 
       const result = await response.text();
       console.log("Server response:", result);
