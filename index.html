@@ -200,27 +200,52 @@
       </div>
     </div>
 
-    <script>
-      const form = document.getElementById("visitForm");
-      const overlay = document.getElementById("popupOverlay");
-      const popup = document.getElementById("popupBox");
+<script>
+  const form = document.getElementById("visitForm");
+  const overlay = document.getElementById("popupOverlay");
+  const popup = document.getElementById("popupBox");
 
-      form.addEventListener("submit", function(e) {
-        e.preventDefault();
+  form.addEventListener("submit", async function(e) {
+    e.preventDefault();
 
-        // tampilkan popup
-        overlay.style.display = "flex";
-        setTimeout(() => popup.classList.add("show"), 50);
+    // ambil semua input form
+    const data = {
+      nama: form.querySelector('input[placeholder="Masukkan nama lengkap"]').value,
+      instansi: form.querySelector('input[placeholder="Masukkan asal instansi"]').value,
+      tujuan: form.querySelector('textarea[placeholder="Tuliskan tujuan kunjungan Anda"]').value,
+      alamat: form.querySelector('textarea[placeholder="Masukkan alamat lengkap"]').value,
+      kontak: form.querySelector('input[placeholder="Contoh: 081234567890"]').value
+    };
 
-        // auto close setelah 5 detik
-        setTimeout(() => {
-          popup.classList.remove("show");
-          setTimeout(() => {
-            overlay.style.display = "none";
-            form.reset(); // reset form setelah submit
-          }, 300);
-        }, 5000);
+    try {
+      // kirim data ke Apps Script
+      const response = await fetch("https://script.google.com/macros/s/AKfycbwNQgv78hggmzuu3QJowUhoip2Av4av_NJY479i_Yxv1DFesoO2DexZXbJBo0xm2eRL/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
       });
-    </script>
+
+      const result = await response.text();
+      console.log("Server response:", result);
+
+      // tampilkan popup sukses
+      overlay.style.display = "flex";
+      setTimeout(() => popup.classList.add("show"), 50);
+
+      // auto close popup
+      setTimeout(() => {
+        popup.classList.remove("show");
+        setTimeout(() => {
+          overlay.style.display = "none";
+          form.reset(); // reset form setelah submit
+        }, 300);
+      }, 5000);
+
+    } catch (err) {
+      alert("Gagal mengirim data: " + err.message);
+    }
+  });
+</script>
+
   </body>
 </html>
