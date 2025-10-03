@@ -167,90 +167,57 @@
       <!-- Judul Utama -->
       <header>Formulir Kunjungan</header>
       
-      <form id="visitForm" class="form">
-        <div class="input-box">
-          <label>Nama</label>
-          <input type="text" placeholder="Masukkan nama lengkap" required />
-        </div>
-        <div class="input-box">
-          <label>Instansi</label>
-          <input type="text" placeholder="Masukkan asal instansi" required />
-        </div>
-        <div class="input-box">
-          <label>Tujuan Kunjungan</label>
-          <textarea rows="3" placeholder="Tuliskan tujuan kunjungan Anda" required></textarea>
-        </div>
-        <div class="input-box">
-          <label>Alamat</label>
-          <textarea rows="3" placeholder="Masukkan alamat lengkap" required></textarea>
-        </div>
-        <div class="input-box">
-          <label>Nomor Kontak</label>
-          <input type="tel" placeholder="Contoh: 081234567890" required />
-        </div>
-        <button type="submit">Kirim</button>
-      </form>
-    </section>
-
-    <!-- Popup Konfirmasi -->
-    <div class="overlay" id="popupOverlay">
-      <div class="popup" id="popupBox">
-        <h3>Terima kasih!</h3>
-        <p>Data kunjungan Anda telah berhasil dikirim.</p>
-      </div>
+  <!-- Form langsung POST ke Apps Script -->
+  <form id="visitForm" class="form" action="https://script.google.com/macros/s/AKfycbwNQgv78hggmzuu3QJowUhoip2Av4av_NJY479i_Yxv1DFesoO2DexZXbJBo0xm2eRL/exec" method="POST" target="hidden_iframe">
+    <div class="input-box">
+      <label>Nama</label>
+      <input type="text" name="nama" placeholder="Masukkan nama lengkap" required />
     </div>
+    <div class="input-box">
+      <label>Instansi</label>
+      <input type="text" name="instansi" placeholder="Masukkan asal instansi" required />
+    </div>
+    <div class="input-box">
+      <label>Tujuan Kunjungan</label>
+      <textarea name="tujuan" rows="3" placeholder="Tuliskan tujuan kunjungan Anda" required></textarea>
+    </div>
+    <div class="input-box">
+      <label>Alamat</label>
+      <textarea name="alamat" rows="3" placeholder="Masukkan alamat lengkap" required></textarea>
+    </div>
+    <div class="input-box">
+      <label>Nomor Kontak</label>
+      <input type="tel" name="kontak" placeholder="Contoh: 081234567890" required />
+    </div>
+    <button type="submit">Kirim</button>
+  </form>
+</section>
+
+<!-- Popup Konfirmasi -->
+<div class="overlay" id="popupOverlay">
+  <div class="popup" id="popupBox">
+    <h3>Terima kasih!</h3>
+    <p>Data kunjungan Anda telah berhasil dikirim.</p>
+  </div>
+</div>
+
+<!-- Iframe tersembunyi supaya form submit tanpa reload -->
+<iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
 const form = document.getElementById("visitForm");
 const overlay = document.getElementById("popupOverlay");
 const popup = document.getElementById("popupBox");
 
-form.addEventListener("submit", async function(e) {
-  e.preventDefault();
-
-  const data = {
-    nama: form.querySelector('input[placeholder="Masukkan nama lengkap"]').value,
-    instansi: form.querySelector('input[placeholder="Masukkan asal instansi"]').value,
-    tujuan: form.querySelector('textarea[placeholder="Tuliskan tujuan kunjungan Anda"]').value,
-    alamat: form.querySelector('textarea[placeholder="Masukkan alamat lengkap"]').value,
-    kontak: form.querySelector('input[placeholder="Contoh: 081234567890"]').value
-  };
-
-  try {
-    const response = await fetch(
-      "https://script.google.com/macros/s/AKfycbwNQgv78hggmzuu3QJowUhoip2Av4av_NJY479i_Yxv1DFesoO2DexZXbJBo0xm2eRL/exec",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams(data).toString()
-      }
-    );
-
-    const result = await response.json();
-
-    if (result.status === "OK") {
-      overlay.style.display = "flex";
-      setTimeout(() => popup.classList.add("show"), 50);
-
-      setTimeout(() => {
-        popup.classList.remove("show");
-        setTimeout(() => {
-          overlay.style.display = "none";
-          form.reset();
-        }, 300);
-      }, 5000);
-    } else {
-      alert("Gagal simpan: " + result.message);
-    }
-
-  } catch (error) {
-    console.error("Error:", error);
-    alert("Terjadi kesalahan saat mengirim data. Silakan coba lagi.");
-  }
+// Tampilkan popup saat form berhasil submit (iframe load)
+document.querySelector('iframe[name="hidden_iframe"]').addEventListener('load', function(){
+  overlay.style.display = "flex";
+  setTimeout(()=>popup.classList.add("show"),50);
+  setTimeout(()=>{
+    popup.classList.remove("show");
+    setTimeout(()=>{overlay.style.display="none"; form.reset();},300);
+  },5000);
 });
-
 </script>
-  </body>
+</body>
 </html>
